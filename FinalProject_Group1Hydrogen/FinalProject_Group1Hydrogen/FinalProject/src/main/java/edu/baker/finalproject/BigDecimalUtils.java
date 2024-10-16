@@ -13,14 +13,13 @@ import java.math.RoundingMode;
  * @author Noah Wood
  */
 class BigDecimalUtils {
+
     static final BigDecimal recip(BigDecimal x, MathContext mc) 
     {
         // Convert the BigDecimal to double
         double xDouble = x.doubleValue();
-
         // Perform the reciprocal operation (1 / x)
         double resultDouble = 1.0 / xDouble;
-
         // Convert the result back to BigDecimal with the specified MathContext
         return new BigDecimal(resultDouble, mc);
     }
@@ -52,10 +51,8 @@ class BigDecimalUtils {
     static final BigDecimal round(BigDecimal x, MathContext mc) {
         // Convert BigDecimal to double
         double xDouble = x.doubleValue();
-
         // Round the double value using Math.round and convert back to BigDecimal
         BigDecimal result = new BigDecimal(Math.round(xDouble), mc);
-
         // Return the result with the specified precision
         return result.setScale(mc.getPrecision(), mc.getRoundingMode());
     }
@@ -64,10 +61,8 @@ class BigDecimalUtils {
     {
         // Convert BigDecimal to double
         double xDouble = x.doubleValue();
-
         // Use Math.floor for positive numbers and Math.ceil for negative numbers
         double result = xDouble >= 0 ? Math.floor(xDouble) : Math.ceil(xDouble);
-
         // Convert result back to BigDecimal with specified precision
         return new BigDecimal(result, mc);
     }
@@ -97,14 +92,6 @@ class BigDecimalUtils {
         return BigDecimal.ZERO; // STUB ONLY
     }
 
-    /**
-     * Computes e^x using BigDecimal arithmetic.
-     * 
-     * @param x The exponent
-     * @param mc The MathContext for precision control
-     * @return e^x as a BigDecimal
-     * @author Noah Wood
-     */
     static final BigDecimal exp(BigDecimal x, MathContext mc)
     {
         // Convert BigDecimal to double
@@ -119,7 +106,14 @@ class BigDecimalUtils {
 
     static final BigDecimal log(BigDecimal x, MathContext mc)
     {
-        return BigDecimal.ZERO; // STUB ONLY
+        // Convert BigDecimal to double
+        double xDouble = x.doubleValue();
+        
+        // Compute natural logarithm using Math.log
+        double result = Math.log(xDouble);
+        
+        // Convert result back to BigDecimal with specified precision
+        return new BigDecimal(result, mc);
     }
 
     static final BigDecimal exp10(BigDecimal x, MathContext mc)
@@ -134,7 +128,14 @@ class BigDecimalUtils {
 
     static final BigDecimal cos(BigDecimal x, MathContext mc)
     {
-        return BigDecimal.ZERO; // STUB ONLY
+        // Convert BigDecimal to double
+        double xDouble = x.doubleValue();
+        
+        // Compute cosine using Math.cos
+        double result = Math.cos(xDouble);
+        
+        // Convert result back to BigDecimal with specified precision
+        return new BigDecimal(result, mc);
     }
 
     static final BigDecimal sin(BigDecimal x, MathContext mc)
