@@ -103,7 +103,7 @@ class BigDecimalUtils {
      * @param x The exponent
      * @param mc The MathContext for precision control
      * @return e^x as a BigDecimal
-     * @author Noah Wood
+     * @author Abul Shordar
      */
     static final BigDecimal exp(BigDecimal x, MathContext mc)
     {
