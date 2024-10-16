@@ -20,10 +20,9 @@ import java.math.MathContext;
  */
 
 class BigDecimalUtilsTest {
-
     private static final MathContext MC = new MathContext(15);
     private static final double DELTA = 1e-10;
-    
+
     @Test
     void testRecip() {
         BigDecimal x = new BigDecimal("2");
@@ -137,6 +136,95 @@ class BigDecimalUtilsTest {
     void testExpPrecision() {
         MathContext highPrecision = new MathContext(50);
         BigDecimal result = BigDecimalUtils.exp(BigDecimal.ONE, highPrecision);
+        assertEquals(50, result.precision(), "Result should have the precision specified by MathContext");
+    }
+
+    @Test
+    void testLogOne() {
+        assertEquals(BigDecimal.ZERO, BigDecimalUtils.log(BigDecimal.ONE, MC), "log(1) should be 0");
+    }
+
+    @Test
+    void testLogE() {
+        BigDecimal e = new BigDecimal("2.718281828459045");
+        BigDecimal result = BigDecimalUtils.log(e, MC);
+        assertTrue(BigDecimal.ONE.subtract(result).abs().doubleValue() < DELTA, "log(e) should be close to 1");
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "2, 0.693147180559945",
+        "10, 2.302585092994046",
+        "0.5, -0.693147180559945",
+        "100, 4.605170185988092"
+    })
+    void testLogVariousInputs(String input, String expected) {
+        BigDecimal x = new BigDecimal(input);
+        BigDecimal expectedValue = new BigDecimal(expected);
+        BigDecimal actualValue = BigDecimalUtils.log(x, MC);
+        assertTrue(expectedValue.subtract(actualValue).abs().doubleValue() < DELTA, 
+                   "log(" + input + ") should be close to " + expected);
+    }
+
+    @Test
+    void testLogZero() {
+        assertThrows(ArithmeticException.class, () -> BigDecimalUtils.log(BigDecimal.ZERO, MC),
+                     "log(0) should throw an ArithmeticException");
+    }
+
+    @Test
+    void testLogNegative() {
+        assertThrows(ArithmeticException.class, () -> BigDecimalUtils.log(new BigDecimal("-1"), MC),
+                     "log of a negative number should throw an ArithmeticException");
+    }
+
+    @Test
+    void testLogPrecision() {
+        MathContext highPrecision = new MathContext(50);
+        BigDecimal result = BigDecimalUtils.log(BigDecimal.TEN, highPrecision);
+        assertEquals(50, result.precision(), "Result should have the precision specified by MathContext");
+    }
+
+    @Test
+    void testCosZero() {
+        assertEquals(BigDecimal.ONE, BigDecimalUtils.cos(BigDecimal.ZERO, MC), "cos(0) should be 1");
+    }
+
+    @Test
+    void testCosPiHalf() {
+        BigDecimal piHalf = new BigDecimal(Math.PI / 2);
+        BigDecimal result = BigDecimalUtils.cos(piHalf, MC);
+        assertTrue(result.abs().doubleValue() < DELTA, "cos(π/2) should be close to 0");
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "0, 1",
+        "3.14159265358979, -1",
+        "1.57079632679490, 0",
+        "0.523598775598299, 0.866025403784439",
+        "2.0943951023932, -0.5"
+    })
+    void testCosVariousInputs(String input, String expected) {
+        BigDecimal x = new BigDecimal(input);
+        BigDecimal expectedValue = new BigDecimal(expected);
+        BigDecimal actualValue = BigDecimalUtils.cos(x, MC);
+        assertTrue(expectedValue.subtract(actualValue).abs().doubleValue() < DELTA, 
+                   "cos(" + input + ") should be close to " + expected);
+    }
+
+    @Test
+    void testCosLargeInput() {
+        BigDecimal largeInput = new BigDecimal("1000000");
+        BigDecimal result = BigDecimalUtils.cos(largeInput, MC);
+        assertTrue(result.compareTo(BigDecimal.ONE) <= 0 && result.compareTo(BigDecimal.ONE.negate()) >= 0,
+                   "cos of a large number should be between -1 and 1");
+    }
+
+    @Test
+    void testCosPrecision() {
+        MathContext highPrecision = new MathContext(50);
+        BigDecimal result = BigDecimalUtils.cos(BigDecimal.ONE, highPrecision);
         assertEquals(50, result.precision(), "Result should have the precision specified by MathContext");
     }
 }
