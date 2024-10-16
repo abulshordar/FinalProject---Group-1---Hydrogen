@@ -1,4 +1,4 @@
-/*
+ /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit5TestClass.java to edit this template
  */
@@ -137,6 +137,52 @@ class BigDecimalUtilsTest {
     void testExpPrecision() {
         MathContext highPrecision = new MathContext(50);
         BigDecimal result = BigDecimalUtils.exp(BigDecimal.ONE, highPrecision);
+        assertEquals(50, result.precision(), "Result should have the precision specified by MathContext");
+    }
+
+     @Test
+    void testLogOne() {
+        assertEquals(BigDecimal.ZERO, BigDecimalUtils.log(BigDecimal.ONE, MC), "log(1) should be 0");
+    }
+
+    @Test
+    void testLogE() {
+        BigDecimal e = new BigDecimal("2.718281828459045");
+        BigDecimal result = BigDecimalUtils.log(e, MC);
+        assertTrue(BigDecimal.ONE.subtract(result).abs().doubleValue() < DELTA, "log(e) should be close to 1");
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "2, 0.693147180559945",
+        "10, 2.302585092994046",
+        "0.5, -0.693147180559945",
+        "100, 4.605170185988092"
+    })
+    void testLogVariousInputs(String input, String expected) {
+        BigDecimal x = new BigDecimal(input);
+        BigDecimal expectedValue = new BigDecimal(expected);
+        BigDecimal actualValue = BigDecimalUtils.log(x, MC);
+        assertTrue(expectedValue.subtract(actualValue).abs().doubleValue() < DELTA, 
+                   "log(" + input + ") should be close to " + expected);
+    }
+
+    @Test
+    void testLogZero() {
+        assertThrows(ArithmeticException.class, () -> BigDecimalUtils.log(BigDecimal.ZERO, MC),
+                     "log(0) should throw an ArithmeticException");
+    }
+
+    @Test
+    void testLogNegative() {
+        assertThrows(ArithmeticException.class, () -> BigDecimalUtils.log(new BigDecimal("-1"), MC),
+                     "log of a negative number should throw an ArithmeticException");
+    }
+
+    @Test
+    void testLogPrecision() {
+        MathContext highPrecision = new MathContext(50);
+        BigDecimal result = BigDecimalUtils.log(BigDecimal.TEN, highPrecision);
         assertEquals(50, result.precision(), "Result should have the precision specified by MathContext");
     }
 }
