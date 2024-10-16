@@ -140,3 +140,47 @@ class BigDecimalUtilsTest {
         assertEquals(50, result.precision(), "Result should have the precision specified by MathContext");
     }
 }
+
+@Test
+void testCosZero() {
+    assertEquals(BigDecimal.ONE, BigDecimalUtils.cos(BigDecimal.ZERO, MC), "cos(0) should be 1");
+}
+
+@Test
+void testCosPiHalf() {
+    BigDecimal piHalf = new BigDecimal(Math.PI / 2);
+    BigDecimal result = BigDecimalUtils.cos(piHalf, MC);
+    assertTrue(result.abs().doubleValue() < DELTA, "cos(π/2) should be close to 0");
+}
+
+@ParameterizedTest
+@CsvSource({
+    "0, 1",
+    "3.14159265358979, -1",
+    "1.57079632679490, 0",
+    "0.523598775598299, 0.866025403784439",
+    "2.0943951023932, -0.5"
+})
+void testCosVariousInputs(String input, String expected) {
+    BigDecimal x = new BigDecimal(input);
+    BigDecimal expectedValue = new BigDecimal(expected);
+    BigDecimal actualValue = BigDecimalUtils.cos(x, MC);
+    assertTrue(expectedValue.subtract(actualValue).abs().doubleValue() < DELTA, 
+               "cos(" + input + ") should be close to " + expected);
+}
+
+@Test
+void testCosLargeInput() {
+    BigDecimal largeInput = new BigDecimal("1000000");
+    BigDecimal result = BigDecimalUtils.cos(largeInput, MC);
+    assertTrue(result.compareTo(BigDecimal.ONE) <= 0 && result.compareTo(BigDecimal.ONE.negate()) >= 0,
+               "cos of a large number should be between -1 and 1");
+}
+
+@Test
+void testCosPrecision() {
+    MathContext highPrecision = new MathContext(50);
+    BigDecimal result = BigDecimalUtils.cos(BigDecimal.ONE, highPrecision);
+    assertEquals(50, result.precision(), "Result should have the precision specified by MathContext");
+}
+
