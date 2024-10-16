@@ -97,6 +97,18 @@ class BigDecimalUtils {
         return BigDecimal.ZERO; // STUB ONLY
     }
 
+      static final BigDecimal cos(BigDecimal x, MathContext mc)
+    {
+        // Convert BigDecimal to double
+        double xDouble = x.doubleValue();
+        
+        // Compute cosine using Math.cos
+        double result = Math.cos(xDouble);
+        
+        // Convert result back to BigDecimal with specified precision
+        return new BigDecimal(result, mc);
+    }
+
     /**
      * Computes e^x using BigDecimal arithmetic.
      * 
@@ -117,6 +129,7 @@ class BigDecimalUtils {
         return new BigDecimal(result, mc);
     }
 
+
     static final BigDecimal log(BigDecimal x, MathContext mc)
     {
         return BigDecimal.ZERO; // STUB ONLY
@@ -132,11 +145,7 @@ class BigDecimalUtils {
         return BigDecimal.ZERO; // STUB ONLY
     }
 
-    static final BigDecimal cos(BigDecimal x, MathContext mc)
-    {
-        return BigDecimal.ZERO; // STUB ONLY
-    }
-
+   
     static final BigDecimal sin(BigDecimal x, MathContext mc)
     {
         return BigDecimal.ZERO; // STUB ONLY
