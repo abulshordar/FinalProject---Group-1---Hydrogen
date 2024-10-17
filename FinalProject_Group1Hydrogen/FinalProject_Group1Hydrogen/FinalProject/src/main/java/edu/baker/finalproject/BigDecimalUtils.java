@@ -86,7 +86,6 @@ class BigDecimalUtils {
         return new BigDecimal(Math.pow(base.doubleValue(), power.round(mc).intValue()), mc);
     }
 
-
     /**
      * Computes nth power using BigDecimal arithmetic.
      * 
@@ -100,7 +99,6 @@ class BigDecimalUtils {
     {
         return new BigDecimal(Math.pow(base.doubleValue(), (int)ipower), mc);
     }
-
 
     /**
      * Computes nth (integer) root using BigDecimal arithmetic.
@@ -185,6 +183,26 @@ class BigDecimalUtils {
         
         // Compute e^x using Math.exp
         double result = Math.exp(xDouble);
+        
+        // Convert result back to BigDecimal with specified precision
+        return new BigDecimal(result, mc);
+    }
+
+    /**
+     * Computes 10^x using BigDecimal arithmetic.
+     * 
+     * @param x The exponent
+     * @param mc The MathContext for precision control
+     * @return 10^x as a BigDecimal
+     * @author Noah Wood
+     */
+    static final BigDecimal exp10(BigDecimal x, MathContext mc) 
+    {
+        // Convert BigDecimal to double
+        double xDouble = x.doubleValue();
+
+        // Compute 10^x using Math.pow
+        double result = Math.pow(10, xDouble);
         
         // Convert result back to BigDecimal with specified precision
         return new BigDecimal(result, mc);
