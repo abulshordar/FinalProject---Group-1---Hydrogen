@@ -140,6 +140,54 @@ class BigDecimalUtilsTest {
         BigDecimal result = BigDecimalUtils.exp(BigDecimal.ONE, highPrecision);
         assertEquals(50, result.precision(), "Result should have the precision specified by MathContext");
     }
+     // Test for exp10 with positive exponent
+    @Test
+    void testExp10Positive() {
+        BigDecimal x = new BigDecimal("2");
+        BigDecimal expected = new BigDecimal("100");
+        assertEquals(expected, BigDecimalUtils.exp10(x, MC), "exp10(2) should be 100");
+    }
+
+    // Test for exp10 with negative exponent
+    @Test
+    void testExp10Negative() {
+        BigDecimal x = new BigDecimal("-2");
+        BigDecimal expected = new BigDecimal("0.01");
+        assertEquals(expected, BigDecimalUtils.exp10(x, MC), "exp10(-2) should be 0.01");
+    }
+
+    // Test for exp10 with zero exponent
+    @Test
+    void testExp10Zero() {
+        BigDecimal x = BigDecimal.ZERO;
+        BigDecimal expected = BigDecimal.ONE;
+        assertEquals(expected, BigDecimalUtils.exp10(x, MC), "exp10(0) should be 1");
+    }
+
+    // Test for exp10 with fractional exponent
+    @Test
+    void testExp10Fractional() {
+        BigDecimal x = new BigDecimal("0.5"); // 10^(0.5) is sqrt(10)
+        BigDecimal expected = new BigDecimal("3.162277660168379").round(MC);
+        assertEquals(expected, BigDecimalUtils.exp10(x, MC), "exp10(0.5) should be approximately 3.162");
+    }
+
+    // Test for exp10 with a large exponent
+    @Test
+    void testExp10Large() {
+        BigDecimal x = new BigDecimal("10");
+        BigDecimal expected = new BigDecimal("10000000000");
+        assertEquals(expected, BigDecimalUtils.exp10(x, MC), "exp10(10) should be 10000000000");
+    }
+
+    // Test for exp10 with a small negative exponent
+    @Test
+    void testExp10SmallNegative() {
+        BigDecimal x = new BigDecimal("-0.1");
+        BigDecimal expected = new BigDecimal("0.794328234724281").round(MC);
+        assertEquals(expected, BigDecimalUtils.exp10(x, MC), "exp10(-0.1) should be approximately 0.794");
+    }
+}
 
     /**
      * Parameterized test for ipow(BigDecimal base, BigDecimal power, MathContext mc).
