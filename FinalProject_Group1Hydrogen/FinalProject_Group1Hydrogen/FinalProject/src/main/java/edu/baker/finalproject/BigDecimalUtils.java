@@ -252,23 +252,28 @@ class BigDecimalUtils {
         
     }
     
-    /**
-     * Computes the tangent of a given angle in radians.
-     * 
-     * @param x The angle in radians as a BigDecimal.
-     * @param mc The MathContext for precision control
-     * @return The tangent of the given angle as a BigDecimal
-     * @author Yordanos Shiferaw
-     */
-    static final BigDecimal tan(BigDecimal x, MathContext mc)
-    {
-        //Convert BigDecimal to double
-        double xDouble = x.doubleValue();
-        //Compute cosine using Math.exp
-        double result = Math.tan(xDouble); 
-        //Convert result back to BigDecimal with specified precision
-        return new BigDecimal(result, mc);
+/**
+ * Computes the tangent of a given angle in radians using BigDecimal arithmetic.
+ * 
+ * @param x The angle in radians as a BigDecimal.
+ * @param mc The MathContext for precision control
+ * @return The tangent of the given angle as a BigDecimal
+ * @author Abul Shordar
+ 
+
+ */
+static final BigDecimal tan(BigDecimal x, MathContext mc) {
+    BigDecimal sinX = sin(x, mc);
+    BigDecimal cosX = cos(x, mc);
+    
+    if (cosX.compareTo(BigDecimal.ZERO) == 0) {
+        throw new ArithmeticException("Tangent is undefined for angles where cosine is zero.");
     }
+    
+    return sinX.divide(cosX, mc);
+}
+
+    
     
     /**
      * Computes the arcsine of a given angle in radians.
@@ -288,20 +293,27 @@ class BigDecimalUtils {
         return new BigDecimal(result, mc);
     }
 
-    /**
-     
-    Computes the arccosine of a given angle in radians.
-    @param x The angle in radians as a BigDecimal.
-    @param mc The MathContext for precision control
-    @return The arccosine of the given angle as a BigDecimal
-    @author Yordanos Shiferaw*/
-    static final BigDecimal acos(BigDecimal x, MathContext mc){//Convert BigDecimal to double
-        double xDouble = x.doubleValue();
-        //Compute cosine using Math.exp
-        double result = Math.acos(xDouble);
-        //Convert result back to BigDecimal with specified precision
-        return new BigDecimal(result, mc);
+/**
+ * Computes the arccosine of a given value using BigDecimal arithmetic.
+ * 
+ * @param x The value as a BigDecimal, must be in the range [-1, 1].
+ * @param mc The MathContext for precision control
+ * @return The arccosine of the given value in radians as a BigDecimal
+ * @author Abul Shordar
+
+
+
+ 
+ */
+static final BigDecimal acos(BigDecimal x, MathContext mc) {
+    if (x.abs().compareTo(BigDecimal.ONE) > 0) {
+        throw new ArithmeticException("Domain error: acos(x) is only defined for -1 <= x <= 1");
     }
+    
+    BigDecimal halfPi = pi(mc).divide(new BigDecimal("2"), mc);
+    return halfPi.subtract(asin(x, mc), mc);
+}
+    
 
     /**
      * Computes the arctangent of a given angle in radians.
